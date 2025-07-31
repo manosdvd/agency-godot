@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CaseResource" load_steps=3 format=3 uid="uid://djpgn42jyyd5f"]
+
+[ext_resource type="Script" uid="uid://cxs8udql3d7lb" path="res://scripts/resources/clue_resource.gd" id="1_uv8hn"]
+[ext_resource type="Script" uid="uid://dn0nbvg5vsdxy" path="res://scripts/resources/case_resource.gd" id="2_gacih"]
+
+[resource]
+script = ExtResource("2_gacih")
+victim = ""
+culprit = ""
+crime_scene = ""
+murder_weapon = ""
+weapon_is_hidden = false
+means_clue = ""
+motive_clue = ""
+opportunity_clue = ""
+red_herring_clues = PackedStringArray()
+narrative_viewpoint = ""
+narrative_tense = ""
+core_mystery_solution = ""
+ultimate_reveal_scene = ""
+opening_monologue = ""
+successful_denouement = ""
+failed_denouement = ""
+interviews = {}
+location_clues = {}
+clues = Array[ExtResource("1_uv8hn")]([])
+metadata/_custom_type_script = "uid://dn0nbvg5vsdxy"
