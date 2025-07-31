@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://bb4qyrq3v8p55"]
+
+[ext_resource type="Theme" uid="uid://cbhknop1vdjdr" path="res://themes/main_theme.tres" id="1_k62ti"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_swjf8"]
+[ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="3_87l0o"]
+
+[sub_resource type="GDScript" id="GDScript_swjf8"]
+script/source = " # agency/scripts/main_ui/main.gd
+		extends Control
+		
+		# Preload the scenes we will switch to.
+		# Using packed scenes is more efficient than loading by string path every time.
+		var world_builder_scene = preload(\"res://scenes/world_builder/world_builder.tscn\")
+		var case_creator_scene = preload(\"res://scenes/case_creator/case_creator.tscn\")
+		var validator_scene = preload(\"res://scenes/validator/validator.tscn\")
+		
+		func _ready():
+			# Connect the button signals to functions in this script.
+			# We connect the \"pressed\" signal which is emitted when a button is clicked.
+			$CenterContainer/VBoxContainer/WorldBuilderButton.pressed.connect(_on_world_builder_button_pressed)
+			$CenterContainer/VBoxContainer/CaseCreatorButton.pressed.connect(_on_case_creator_button_pressed)
+			$CenterContainer/VBoxContainer/ValidatorButton.pressed.connect(_on_validator_button_pressed)
+			$CenterContainer/VBoxContainer/QuitButton.pressed.connect(_on_quit_button_pressed)
+		
+		# This function will be called when the World Builder button is pressed.
+		func _on_world_builder_button_pressed():
+			# The get_tree().change_scene_to_packed() function unloads the current scene
+			# and loads the new one.
+			get_tree().change_scene_to_packed(world_builder_scene)
+		
+		# This function will be called when the Case Creator button is pressed.
+		func _on_case_creator_button_pressed():
+			get_tree().change_scene_to_packed(case_creator_scene)
+		
+		# This function will be called when the Validator button is pressed.
+		func _on_validator_button_pressed():
+			get_tree().change_scene_to_packed(validator_scene)
+		
+		# This function will be called when the Quit button is pressed.
+		func _on_quit_button_pressed():
+			# get_tree().quit() safely closes the application.
+			get_tree().quit()
+"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_k62ti")
+script = SubResource("GDScript_swjf8")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_swjf8")
+theme_override_font_sizes/font_size = 96
+text = "AGENCY"
+horizontal_alignment = 1
+
+[node name="WorldBuilderButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_87l0o")
+text = "World Builder
+"
+
+[node name="CaseBuilderButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Case Builder
+"
+
+[node name="ValidatorButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Validator"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit
+"

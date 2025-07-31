@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bb4qyrq3v8p55"]
 
 [ext_resource type="Theme" uid="uid://cbhknop1vdjdr" path="res://themes/main_theme.tres" id="1_k62ti"]
-[ext_resource type="Script" uid="uid://cp0or0kxcub5x" path="res://scripts/main_ui/main.gd" id="2_87l0o"]
+[ext_resource type="Script" uid="uid://c7p6h41pnyl1q" path="res://scenes/main_ui/main.gd" id="2_87l0o"]
 [ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_swjf8"]
 [ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="3_87l0o"]
 
@@ -39,7 +39,7 @@ theme_override_fonts/font = ExtResource("3_87l0o")
 text = "World Builder
 "
 
-[node name="CaseCreatorButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="CaseBuilderButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "Case Builder
 "
@@ -52,8 +52,3 @@ text = "Validator"
 layout_mode = 2
 text = "Quit
 "
-
-[connection signal="pressed" from="CenterContainer/VBoxContainer/WorldBuilderButton" to="." method="_on_world_builder_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/CaseCreatorButton" to="." method="_on_case_creator_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/ValidatorButton" to="." method="_on_validator_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
