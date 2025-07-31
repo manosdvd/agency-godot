@@ -1,11 +1,11 @@
-# res://scripts/resources/item_resource.gd
+@tool
 extends Resource
 class_name ItemResource
 
 @export var id: String = ""
-@export var item_name: String = "New Item"
+@export var item_name: String = ""
 @export var image_path: String = ""
-@export var item_type: String = "" # e.g., "Weapon", "Document"
+@export var item_type: String = "" # e.g., "Weapon", "Document", "Personal Effect"
 @export_multiline var description: String = ""
 @export_multiline var use: String = ""
 @export var is_possible_means: bool = false

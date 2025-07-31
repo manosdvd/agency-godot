@@ -1,9 +1,9 @@
-# res://scripts/resources/faction_resource.gd
+@tool
 extends Resource
 class_name FactionResource
 
 @export var id: String = ""
-@export var faction_name: String = "New Faction"
+@export var faction_name: String = ""
 @export var archetype: String = "" # e.g., "Syndicate", "Corporation"
 @export_multiline var description: String = ""
 @export_multiline var ideology: String = ""

@@ -1,9 +1,8 @@
-# res://scripts/resources/case_resource.gd
+@tool
 extends Resource
 class_name CaseResource
 
 # --- Case Meta ---
-@export var case_name: String = "New Case"
 @export var victim: String = "" # Links to CharacterResource.id
 @export var culprit: String = "" # Links to CharacterResource.id
 @export var crime_scene: String = "" # Links to LocationResource.id
@@ -13,8 +12,8 @@ class_name CaseResource
 @export var motive_clue: String = "" # Links to ClueResource.id
 @export var opportunity_clue: String = "" # Links to ClueResource.id
 @export var red_herring_clues: PackedStringArray # Links to ClueResource.id
-@export var narrative_viewpoint: String = "First Person (Sleuth)"
-@export var narrative_tense: String = "Past Tense"
+@export var narrative_viewpoint: String = "" # e.g., "First Person (Sleuth)"
+@export var narrative_tense: String = "" # e.g., "Past Tense"
 @export_multiline var core_mystery_solution: String = ""
 @export_multiline var ultimate_reveal_scene: String = ""
 @export_multiline var opening_monologue: String = ""

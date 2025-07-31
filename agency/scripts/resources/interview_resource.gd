@@ -1,4 +1,4 @@
-# res://scripts/resources/interview_resource.gd
+@tool
 # Represents a single Q&A block in an interview with a character.
 extends Resource
 class_name InterviewResource
