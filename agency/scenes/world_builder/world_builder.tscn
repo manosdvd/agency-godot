@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://2f2fdntra2fv"]
 
-[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="1_bwglb"]
+[ext_resource type="Script" uid="uid://3cvslrw38kw0" path="res://scripts/world_builder/world_builder.gd" id="1_bwglb"]
 
 [node name="WorldBuilder" type="Control"]
 layout_mode = 3
@@ -9,20 +9,86 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_bwglb")
 
-[node name="Label" type="Label" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
+anchors_preset = -1
+anchor_left = 0.138
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -53.5
-offset_top = -11.5
-offset_right = 53.5
-offset_bottom = 11.5
+anchor_bottom = 1.0
+offset_left = -136.976
+offset_top = 4.0
+offset_right = 596.0
+offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_bwglb")
-theme_override_font_sizes/font_size = 76
-text = "World Builder"
+drag_area_highlight_in_editor = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+text = "World Resources"
+horizontal_alignment = 1
+
+[node name="ResourceTree" type="Tree" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 2
+
+[node name="EditorPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer2"]
+layout_mode = 2
+text = "Description"
+
+[node name="DescriptionEdit" type="TextEdit" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer2"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3"]
+layout_mode = 2
+text = "Save Resource"
+
+[node name="NewButton" type="Button" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3"]
+layout_mode = 2
+text = "New District
+"
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -170.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 41.0
+grow_horizontal = 0
+text = "Back To Main Menu
+"

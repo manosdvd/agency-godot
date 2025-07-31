@@ -52,8 +52,3 @@ text = "Validator"
 layout_mode = 2
 text = "Quit
 "
-
-[connection signal="pressed" from="CenterContainer/VBoxContainer/WorldBuilderButton" to="." method="_on_world_builder_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/CaseCreatorButton" to="." method="_on_case_creator_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/ValidatorButton" to="." method="_on_validator_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
