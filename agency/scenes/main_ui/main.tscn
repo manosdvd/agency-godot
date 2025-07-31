@@ -1,28 +1,52 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhdexv7etrru"]
+[gd_scene load_steps=4 format=3 uid="uid://bhdexv7etrru"]
 
 [ext_resource type="Theme" uid="uid://cbhknop1vdjdr" path="res://themes/main_theme.tres" id="1_k62ti"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_swjf8"]
+[ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="3_87l0o"]
 
-[node name="Main" type="MarginContainer"]
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_k62ti")
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
 
-[node name="MainVBox" type="VBoxContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
 
-[node name="HeaderPlaceholder" type="PanelContainer" parent="MainVBox"]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_swjf8")
+theme_override_font_sizes/font_size = 96
+text = "AGENCY"
+horizontal_alignment = 1
 
-[node name="MainArea" type="HSplitContainer" parent="MainVBox"]
+[node name="worldbuilderbutton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("3_87l0o")
+text = "World Builder
+"
 
-[node name="CaseGraph" type="GraphEdit" parent="MainVBox/MainArea"]
+[node name="casebuilderbutton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+text = "Case Builder
+"
 
-[node name="RightPanel" type="PanelContainer" parent="MainVBox/MainArea"]
+[node name="validatorbutton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+text = "Validator"
+
+[node name="quitbutton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit
+"
