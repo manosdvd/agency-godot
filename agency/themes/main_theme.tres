@@ -1,0 +1,21 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cbhknop1vdjdr"]
+
+[ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="1_vu6l5"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_ydht1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gw6x"]
+bg_color = Color(0.0627451, 0.0784314, 0.101961, 1)
+
+[resource]
+Control/colors/FontColor = Color(0.878431, 0.878431, 0.878431, 1)
+Control/font_sizes/fontsize = 16
+Control/fonts/Font = ExtResource("1_vu6l5")
+HeaderLabels/colors/fontcolor = Color(0.831373, 0.686275, 0.215686, 1)
+HeaderLabels/font_sizes/fontSize = 36
+HeaderLabels/fonts/font = ExtResource("2_ydht1")
+PanelContainer/styles/styles = SubResource("StyleBoxFlat_8gw6x")
+TabContainer/colors/font_hovered_color = Color(0.729412, 0.898039, 1, 1)
+TabContainer/colors/font_selected_color = Color(0, 0.898039, 1, 1)
+TabContainer/colors/font_unselected_color = Color(0.831373, 0.686275, 0.215686, 1)
+TabContainer/font_sizes/font_size = 36
+TabContainer/fonts/font = ExtResource("2_ydht1")

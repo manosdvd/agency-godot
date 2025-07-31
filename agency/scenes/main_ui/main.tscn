@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhdexv7etrru"]
+
+[ext_resource type="Theme" uid="uid://cbhknop1vdjdr" path="res://themes/main_theme.tres" id="1_k62ti"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_k62ti")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_k62ti")
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+current_tab = 0
+
+[node name="World Builder" type="Panel" parent="PanelContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="PanelContainer/TabContainer/World Builder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/TabContainer/World Builder/HSplitContainer"]
+layout_mode = 2
+
+[node name="AssetListPanel" type="VBoxContainer" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "WORLD ASSETS"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel/Label"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BtnShowChars" type="Button" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel/Label/HBoxContainer"]
+layout_mode = 2
+
+[node name="BtnShowLocs" type="Button" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel/Label/HBoxContainer"]
+layout_mode = 2
+
+[node name="BtnShowFacts" type="Button" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel/Label/HBoxContainer"]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/TabContainer/World Builder/HSplitContainer/PanelContainer/AssetListPanel/Label"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+
+[node name="Case Builder" type="Panel" parent="PanelContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
