@@ -1,298 +1,363 @@
-## Walkthrough A2: Building the World Builder
+# Godot World Builder: Step-by-Step Guide
 
-With our main hub in place, it's time to build the first major tool: the **World Builder**. This interface will allow a creator to define, edit, and save the fundamental components of a game world, specifically **Districts** and **Factions**, as outlined in the blueprint.
+This document provides a complete, beginner-friendly walkthrough for creating the "World Builder" user interface in the Godot Engine (version 4.1+). We will replicate the three-pane layout from our HTML mockup, focusing on structure, theme, and layout first, before adding functionality with GDScript.
 
-### 1\. Setting Up the World Builder Scene
+## Phase 1: Project Setup & Theming
 
-First, let's open the placeholder scene we created and set up a professional-looking layout.
+Before we build the scene, we need to set up the project's aesthetic foundation: the fonts and colors.
 
-1.  **Open the Scene:** In the **FileSystem** dock, navigate to `scenes/world_builder/` and open `world_builder.tscn`.
-    
-2.  **Delete Placeholder:** Delete the placeholder `Label` node.
-    
-3.  **Add Main Layout Container:** We'll use an `HSplitContainer` to create two main panels: one on the left for a list of world assets, and one on the right for editing the selected asset.
-    
-    -   Select the `WorldBuilder` root node.
-        
-    -   Add a child node: `HSplitContainer`.
-        
-    -   In the **Inspector**, go to **Layout > Anchors Preset** and select **Full Rect**. This will make it fill the screen.
-        
-4.  **Add a "Back" button:** We need a way to get back to the main menu.
-    
-    -   Select the `WorldBuilder` root node.
-        
-    -   Add a `Button` node. Rename it `BackButton`.
-        
-    -   In the Inspector, set its **Text** to "Back to Main Menu".
-        
-    -   In the **Layout** panel, set its **Anchors Preset** to **Top Left**. You may need to adjust its position slightly by changing its `position` properties so it doesn't overlap with the split container. A position of (10, 10) should work well.
-        
+### 1.1. Create a Global Theme
 
-### 2\. Building the Left Panel (Resource List)
+A Theme resource allows us to define the look of UI components (called Control nodes) for the entire project, ensuring a consistent style.
 
-The left panel will list all the world-building resources we can edit (Districts, Factions).
+1.  In the **FileSystem** dock (usually bottom-left), right-click on the `res://` folder and select **New -> Folder**. Name it `themes`.
+    
+2.  Right-click the new `themes` folder and select **New -> Resource...**.
+    
+3.  In the dialog, search for and select `Theme`, then click **Create**. Save it as `main_theme.tres`.
+    
+4.  Double-click `main_theme.tres` to open it in the **Theme Editor** (bottom panel).
+    
 
-1.  **Add a `VBoxContainer`:** This will hold a label and our list.
-    
-    -   Select the `HSplitContainer`.
-        
-    -   Add a `VBoxContainer` as its first child. Godot will automatically place it in the left panel.
-        
-    -   In the **Inspector**, go to **Layout > Container Sizing** and enable **Expand** for the **Vertical** property.
-        
-2.  **Add a Label:**
-    
-    -   Select the `VBoxContainer`.
-        
-    -   Add a `Label` child.
-        
-    -   Set its **Text** to `World Resources`.
-        
-    -   Set **Horizontal Alignment** to `Center`.
-        
-3.  **Add a `Tree` node:** A `Tree` is perfect for displaying hierarchical data, like factions within a district, though we'll start simple.
-    
-    -   Select the `VBoxContainer`.
-        
-    -   Add a `Tree` child node. Rename it `ResourceTree`.
-        
-    -   In the **Inspector**, under **Layout > Container Sizing**, set the **Vertical** property to **Expand**. This makes the tree fill the available vertical space.
-        
+### 1.2. Import Fonts & Define Colors
 
-### 3\. Building the Right Panel (Editor)
-
-The right panel is where the details of a selected resource will be displayed and edited.
-
-1.  **Add a `ScrollContainer`:** This ensures that if our editor form gets long, the user can scroll.
+1.  **Import Fonts:**
     
-    -   Select the `HSplitContainer`.
+    -   Drag your font files (`Inter-VariableFont_opsz,wght.ttf` and `PoiretOne-Regular.ttf`) from your computer's file manager directly into Godot's **FileSystem** dock.
         
-    -   Add a `ScrollContainer` as its second child. It will go into the right panel.
+    -   Double-click `main_theme.tres` again.
         
-    -   In the **Inspector**, enable **Follow Focus**. This is a great usability feature that automatically scrolls to the focused UI element.
+    -   In the Theme Editor, click the **Manage Items** button.
         
-2.  **Add a `VBoxContainer`:** This will stack our editor fields.
+    -   Under the **Default Font** section, find the **Font** property. Click the dropdown next to it (`<empty>`) and select **New FontVariation**.
+        
+    -   Click the new `FontVariation` resource to expand its properties in the **Inspector** (right-hand panel).
+        
+    -   Find the **Base Font** property and drag `Inter-VariableFont_opsz,wght.ttf` from the FileSystem onto it.
+        
+    -   Set the **Default Font Size** to `14`.
+        
+2.  **Add a Second Font:**
     
-    -   Select the `ScrollContainer`.
+    -   In the Theme Editor, click **Add Class Items**.
         
-    -   Add a `VBoxContainer` child. Rename it `EditorPanel`.
+    -   In the popup, select `Label`.
         
-    -   In the **Inspector**, under **Layout > Container Sizing**, set the **Horizontal** property to **Expand**.
+    -   Now, in the main Theme Editor view, you'll see a "Label" type. Click the **+** icon next to it and select **Add Font**. Name this new font `display_font`.
         
-3.  **Create the Editor Fields:** We'll add labeled input fields for the properties of a `DistrictResource`.
+    -   Click the `<empty>` value next to `display_font` and create a new `FontVariation`.
+        
+    -   Just like before, set its **Base Font**, but this time use `PoiretOne-Regular.ttf`.
+        
+3.  **Define Colors:**
     
-    -   For each field below, you will:
+    -   In the Theme Editor, find the `PanelContainer` type (or add it via **Add Class Items** if it's not there).
         
-        1.  Add an `HBoxContainer` to the `EditorPanel`.
+    -   Click the **+** icon next to it and select **Add Stylebox**. Choose `StyleBoxFlat`.
+        
+    -   Click the new `StyleBoxFlat` to edit it in the Inspector. Set its **Bg Color** to our dark gray: `#1f2937`.
+        
+    -   Repeat this process to define the core colors from our mockup for different node types. The most important ones are:
+        
+        -   **Button:** Create `StyleBoxFlat` styles for **Normal**, **Hover**, **Pressed**, and **Disabled**. Use the gray, cyan, and gold colors. Set the **Font Color** properties as well.
             
-        2.  Add a `Label` to the `HBoxContainer`.
+        -   **TabContainer:** Define styles for the **Tab Selected** and **Tab Unselected** to get the cyan highlight effect.
             
-        3.  Add the corresponding input control (`LineEdit` or `TextEdit`) to the `HBoxContainer`.
-            
-    -   **Name Field:**
-        
-        -   `HBoxContainer`
-            
-            -   `Label` (Text: `Name`)
-                
-            -   `LineEdit` (Rename: `NameEdit`)
-                
-    -   **Description Field:**
-        
-        -   `HBoxContainer`
-            
-            -   `Label` (Text: `Description`)
-                
-            -   `TextEdit` (Rename: `DescriptionEdit`, set a minimum height in **Layout > Custom Minimum Size**)
-                
-    -   Add **Save** and **New** buttons at the bottom.
-        
-        -   Select the `EditorPanel`.
-            
-        -   Add an `HBoxContainer`.
-            
-        -   Add two `Button` children to it: `SaveButton` (Text: "Save Resource") and `NewButton` (Text: "New District").
+        -   **LineEdit / TextEdit:** Set the `StyleBoxFlat` for the **Normal** and **Focus** states, and define the **Font Color**.
             
 
-Your final scene tree for `world_builder.tscn` should look something like this:
+## Phase 2: Building the Main Scene (`WorldBuilder.tscn`)
+
+This is where we construct the three-pane layout.
+
+1.  Go to **Scene -> New Scene**.
+    
+2.  Choose **User Interface** as the root node. This will create a `Control` node.
+    
+3.  Click on the `Control` node and rename it to `WorldBuilder`.
+    
+4.  In the **Inspector**, go to the **Layout** section, click the **Anchors Preset** icon (the square grid), and select **Full Rect**. This makes it fill the game window.
+    
+5.  In the **Scene** tree, right-click `WorldBuilder` and select **Add Child Node**.
+    
+6.  Search for and add an `HSplitContainer`. This node creates a vertical splitter.
+    
+7.  Select the `HSplitContainer` and set its **Anchors Preset** to **Full Rect** as well.
+    
+8.  In the Inspector, find the **Theme Overrides -> Constants** section for the `HSplitContainer`. Check the box next to **Separation** and set it to `6`. This makes the draggable splitter thicker.
+    
+
+Your scene tree should look like this:
 
     - WorldBuilder (Control)
       - HSplitContainer
-        - VBoxContainer (Left Panel)
-          - Label
-          - ResourceTree
-        - ScrollContainer (Right Panel)
-          - EditorPanel (VBoxContainer)
-            - HBoxContainer (Name)
-              - Label
-              - NameEdit (LineEdit)
-            - HBoxContainer (Description)
-              - Label
-              - DescriptionEdit (TextEdit)
-            - HBoxContainer (Buttons)
-              - SaveButton
-              - NewButton
-      - BackButton
     
 
-### 4\. Scripting the World Builder
+### 2.1. Create the Three Panes
 
-Now, let's add the logic.
+The `HSplitContainer` automatically creates two layout regions. We will add our three main panels to it.
 
-1.  **Create Folders:** We need a place to save our world data. Use the Gemini CLI or Godot's FileSystem dock to create a new top-level folder called `worlds`.
+1.  **Left Navigation Pane:**
     
-        mkdir -p agency/worlds/default
+    -   Right-click `HSplitContainer` and add a `PanelContainer`. Rename it `NavPane`.
         
+    -   In the Inspector, under **Layout -> Custom Minimum Size**, set `x` to `96`. This gives it the narrow starting width.
+        
+2.  **Right Content Area (which will be split again):**
     
-2.  **Attach a Script:** Select the `WorldBuilder` root node and attach a new script. Save it as `agency/scripts/world_builder/world_builder.gd`.
+    -   Right-click `HSplitContainer` and add another `HSplitContainer`. Rename it `ContentSplitter`. This will hold the asset list and the detail view.
+        
+    -   Select `ContentSplitter` and find its **Size Flags** in the Inspector. Set **Horizontal** to **Expand, Fill**.
+        
+3.  **Asset List Pane:**
     
-3.  **Edit the Script:** Replace the default template with the code below. Read the comments carefully to understand what each part does.
+    -   Right-click `ContentSplitter` and add a `PanelContainer`. Rename it `AssetListPane`.
+        
+    -   Set its **Custom Minimum Size** `x` to `250`.
+        
+    -   Set its **Size Flags -> Horizontal** to **Expand, Fill**.
+        
+4.  **Detail Pane:**
     
-        # agency/scripts/world_builder/world_builder.gd
-        extends Control
+    -   Right-click `ContentSplitter` and add a `PanelContainer`. Rename it `DetailPane`.
         
-        # --- UI Node References ---
-        @onready var resource_tree: Tree = $HSplitContainer/VBoxContainer/ResourceTree
-        @onready var name_edit: LineEdit = $HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer/NameEdit
-        @onready var description_edit: TextEdit = $HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer2/DescriptionEdit
-        @onready var save_button: Button = $HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3/SaveButton
-        @onready var new_button: Button = $HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3/NewButton
-        @onready var back_button: Button = $BackButton
+    -   Set its **Size Flags -> Horizontal** to **Expand, Fill**.
         
-        # --- Constants and Variables ---
-        const WORLD_DATA_PATH = "res://worlds/default/"
-        var main_menu_scene = preload("res://scenes/main_ui/main.tscn")
-        var current_resource: Resource = null
-        
-        
-        func _ready() -> void:
-            # --- Connect Signals ---
-            back_button.pressed.connect(_on_back_button_pressed)
-            resource_tree.item_selected.connect(_on_resource_tree_item_selected)
-            save_button.pressed.connect(_on_save_button_pressed)
-            new_button.pressed.connect(_on_new_button_pressed)
-        
-            # --- Initial Setup ---
-            _populate_resource_tree()
-            _clear_editor_panel()
-            # Disable the editor until a resource is selected or created
-            $HSplitContainer/ScrollContainer.visible = false
-        
-        
-        # --- Signal Handlers ---
-        
-        func _on_back_button_pressed() -> void:
-            get_tree().change_scene_to_packed(main_menu_scene)
-        
-        func _on_resource_tree_item_selected() -> void:
-            _clear_editor_panel()
-        
-            var selected_item: TreeItem = resource_tree.get_selected()
-            if not selected_item:
-                current_resource = null
-                return
-        
-            var file_path = selected_item.get_metadata(0)
-            if file_path and ResourceLoader.exists(file_path):
-                current_resource = ResourceLoader.load(file_path)
-                _populate_editor_panel(current_resource)
-                $HSplitContainer/ScrollContainer.visible = true
-        
-        func _on_save_button_pressed() -> void:
-            if not current_resource:
-                return # Can't save if nothing is loaded
-        
-            # Update the resource properties from the UI fields
-            current_resource.name = name_edit.text
-            current_resource.description = description_edit.text
-        
-            # Save the resource back to its file
-            var error = ResourceSaver.save(current_resource)
-            if error != OK:
-                print("Error saving resource: ", error)
-            else:
-                print("Resource saved successfully to: ", current_resource.resource_path)
-                # Refresh the tree to show any name changes
-                _populate_resource_tree()
-        
-        func _on_new_button_pressed() -> void:
-            # Create a new instance of a DistrictResource
-            var new_district = load("res://scripts/resources/district_resource.gd").new()
-        
-            # Give it a temporary name and path
-            var new_filename = "district_%s.tres" % Time.get_unix_time_from_system()
-            new_district.resource_path = WORLD_DATA_PATH.path_join(new_filename)
-            new_district.name = "New District"
-        
-            # Set it as the current resource and populate the editor
-            current_resource = new_district
-            _populate_editor_panel(current_resource)
-            $HSplitContainer/ScrollContainer.visible = true
-            name_edit.grab_focus() # Put the cursor in the name field
-        
-        
-        # --- Helper Functions ---
-        
-        func _populate_resource_tree() -> void:
-            resource_tree.clear()
-            var root = resource_tree.create_item()
-            resource_tree.hide_root = true
-        
-            var districts_item = resource_tree.create_item(root)
-            districts_item.set_text(0, "Districts")
-            districts_item.set_selectable(0, false) # Make the category non-selectable
-        
-            # Use DirAccess to find all .tres files in our world data path
-            var dir = DirAccess.open(WORLD_DATA_PATH)
-            if dir:
-                dir.list_dir_begin()
-                var file_name = dir.get_next()
-                while file_name != "":
-                    if not dir.current_is_dir() and file_name.ends_with(".tres"):
-                        var full_path = WORLD_DATA_PATH.path_join(file_name)
-                        var resource = ResourceLoader.load(full_path)
-        
-                        # Check if it's a DistrictResource before adding
-                        if resource is DistrictResource:
-                            var tree_item = resource_tree.create_item(districts_item)
-                            tree_item.set_text(0, resource.name)
-                            tree_item.set_metadata(0, full_path) # Store the path in the item
-        
-                    file_name = dir.get_next()
-            else:
-                print("Could not open directory: ", WORLD_DATA_PATH)
-        
-        func _populate_editor_panel(resource: Resource) -> void:
-            if resource is DistrictResource:
-                name_edit.text = resource.name
-                description_edit.text = resource.description
-            else:
-                _clear_editor_panel()
-        
-        func _clear_editor_panel() -> void:
-            name_edit.clear()
-            description_edit.clear()
-            $HSplitContainer/ScrollContainer.visible = false
-            current_resource = null
-        
-        
+
+Now your scene tree is structured for the three-pane layout:
+
+    - WorldBuilder (Control)
+      - HSplitContainer
+        - NavPane (PanelContainer)
+        - ContentSplitter (HSplitContainer)
+          - AssetListPane (PanelContainer)
+          - DetailPane (PanelContainer)
     
 
-### 5\. Test the World Builder
+## Phase 3: Populating the Panes
 
-Press **F5** to run the project. From the main menu, click "World Builder".
+Now we fill each of the three `PanelContainer`s with the UI elements.
 
-1.  **Create a New District:** Click the "New District" button. The editor panel on the right should appear.
+### 3.1. NavPane (Left Sidebar)
+
+1.  Add a `VBoxContainer` as a child of `NavPane`.
     
-2.  **Edit and Save:** Give your new district a name (e.g., "Downtown Core") and a description. Click "Save Resource". You should see a success message in the Godot **Output** log. The new district should now appear in the list on the left.
+2.  Add a `Label` as a child of the `VBoxContainer`.
     
-3.  **Select and Edit:** Click the new district in the list. Its details should load back into the editor panel. Change the description and click "Save Resource" again.
-    
-4.  **Navigate:** Click the "Back to Main Menu" button to ensure it returns you to the main hub.
+    -   Set its **Text** to `A`.
+        
+    -   Under **Theme Overrides -> Fonts**, assign our `display_font`.
+        
+    -   Set **Horizontal Alignment** to **Center**.
+        
+3.  Add another `VBoxContainer` to `NavPane`'s `VBoxContainer`. This will hold the buttons. Name it `NavButtonsContainer`.
     
 
-You now have a functional, albeit basic, World Builder! You can create, edit, and save `DistrictResource` files. In the next walkthrough, we will expand this tool to also handle `FactionResource`s and establish relationships between them.
+### 3.2. AssetListPane (Middle Column)
+
+1.  Add a `VBoxContainer` to `AssetListPane`.
+    
+2.  Add a `PanelContainer` to this `VBoxContainer` for the header.
+    
+    -   Inside this header panel, add a `Label`. Rename it `ListTitle`. Set its **Text** to `World Builder`.
+        
+3.  Add a `ScrollContainer` to the `VBoxContainer`.
+    
+    -   Set its **Size Flags -> Vertical** to **Expand, Fill**.
+        
+4.  Add a `VBoxContainer` to the `ScrollContainer`. Rename it `AssetListContainer`. This is where the actual asset items will be added by our script.
+    
+
+### 3.3. DetailPane (Right Column)
+
+This pane will contain two main states: the placeholder and the form.
+
+1.  **Placeholder View:**
+    
+    -   Add a `CenterContainer` to `DetailPane`. Rename it `DetailPlaceholder`.
+        
+    -   Add a `VBoxContainer` to the `CenterContainer`.
+        
+    -   Add a `TextureRect` (for an icon) and two `Label`s to this `VBoxContainer`. Configure their text as in the mockup.
+        
+2.  **Form View:**
+    
+    -   Add a `PanelContainer` to `DetailPane`. Rename it `FormView`. Set its **Anchors Preset** to **Full Rect**. By default, set its **Visible** property (in the Inspector) to `false`.
+        
+    -   Add an `HBoxContainer` to `FormView`.
+        
+    -   **Image Section (Left):**
+        
+        -   Add a `PanelContainer` to the `HBoxContainer`. Set its **Size Flags -> Horizontal** to **Expand, Fill** and its **Stretch Ratio** to `0.33`.
+            
+        -   Inside, add a `VBoxContainer` and then a `TextureRect` for the image and a `Label` for the card's title.
+            
+    -   **Form Section (Right):**
+        
+        -   Add a `VBoxContainer` to the `HBoxContainer`. Set its **Stretch Ratio** to `0.67`.
+            
+        -   Inside this `VBoxContainer`, add a `TabContainer`.
+            
+        -   Set the `TabContainer`'s **Size Flags -> Vertical** to **Expand, Fill**.
+            
+        -   Add a final `HBoxContainer` at the bottom of the `VBoxContainer` for the **Cancel** and **Save** buttons. Add two `Button` nodes to it.
+            
+
+## Phase 4: The Controller Script (`world_builder.gd`)
+
+With the visual layout complete, we add a script to make it interactive.
+
+1.  Select the root `WorldBuilder` node.
+    
+2.  In the Inspector, click the script icon and select **New Script**.
+    
+3.  Save it as `world_builder.gd`.
+    
+
+Here is the initial code structure. Copy and paste this into your new script.
+
+    # world_builder.gd
+    extends Control
+    
+    # --- UI Node References ---
+    # We get references to the nodes we need to manipulate.
+    @onready var nav_buttons_container = $HSplitContainer/NavPane/VBoxContainer/NavButtonsContainer
+    @onready var list_title = $HSplitContainer/ContentSplitter/AssetListPane/VBoxContainer/PanelContainer/ListTitle
+    @onready var asset_list_container = $HSplitContainer/ContentSplitter/AssetListPane/VBoxContainer/ScrollContainer/AssetListContainer
+    
+    @onready var detail_placeholder = $HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder
+    @onready var form_view = $HSplitContainer/ContentSplitter/DetailPane/FormView
+    @onready var card_title = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/VBoxContainer/CardTitle
+    @onready var form_tabs = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/VBoxContainer2/TabContainer
+    
+    # --- Data ---
+    # This dictionary mimics our asset data from the mockup.
+    var asset_types = {
+    	"characters": {
+    		"label": "Characters",
+    		"items": [
+    			{"id": "char_01", "name": "Detective Miles", "description": "A grizzled detective with a past."},
+    			{"id": "char_02", "name": "Isabella Dubois", "description": "A wealthy socialite with dark secrets."}
+    		],
+    		"tabs": ["Profile", "Relationships", "Background", "Notes"]
+    	},
+    	"locations": {
+    		"label": "Locations",
+    		"items": [
+    			{"id": "loc_01", "name": "The Gilded Cage", "description": "An opulent nightclub for the city elite."}
+    		],
+    		"tabs": ["Description", "Inhabitants", "Events", "Map"]
+    	},
+    	"items": {
+    		"label": "Items",
+    		"items": [],
+    		"tabs": ["Details", "History", "Significance"]
+    	}
+    }
+    
+    var current_asset_type = ""
+    var current_item = null
+    
+    # Preload the scenes for our reusable UI components
+    const AssetNavButton = preload("res://scenes/ui/asset_nav_button.tscn")
+    const AssetListItem = preload("res://scenes/ui/asset_list_item.tscn")
+    
+    # --- Godot Functions ---
+    
+    func _ready():
+    	# This function is called when the scene starts.
+    	_setup_navigation()
+    	# Select the first asset type by default
+    	if not asset_types.is_empty():
+    		select_asset_type(asset_types.keys()[0])
+    	
+    	# Connect signals from the Cancel button
+    	var cancel_btn = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/VBoxContainer2/HBoxContainer/CancelButton
+    	cancel_btn.pressed.connect(_on_cancel_pressed)
+    
+    
+    # --- UI Setup Functions ---
+    
+    func _setup_navigation():
+    	# Clear any old buttons
+    	for child in nav_buttons_container.get_children():
+    		child.queue_free()
+    	
+    	# Create a button for each asset type
+    	for type_key in asset_types:
+    		var data = asset_types[type_key]
+    		var nav_button = AssetNavButton.instantiate()
+    		nav_button.set_label(data.label)
+    		# Connect the button's pressed signal to our function
+    		nav_button.pressed.connect(select_asset_type.bind(type_key))
+    		nav_buttons_container.add_child(nav_button)
+    
+    func _update_asset_list():
+    	# Clear the old list
+    	for child in asset_list_container.get_children():
+    		child.queue_free()
+    	
+    	# Get the data for the currently selected type
+    	var type_data = asset_types[current_asset_type]
+    	list_title.text = "All %s" % type_data.label
+    	
+    	# Add the "New Asset" button
+    	var new_button = Button.new()
+    	new_button.text = "New %s" % type_data.label.trim_suffix("s")
+    	new_button.pressed.connect(show_detail_view.bind(null)) # Pass null for a new item
+    	asset_list_container.add_child(new_button)
+    	
+    	# Add an item for each asset
+    	for item_data in type_data.items:
+    		var list_item = AssetListItem.instantiate()
+    		list_item.set_data(item_data)
+    		list_item.gui_input.connect(func(event): 
+    			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+    				show_detail_view(item_data)
+    		)
+    		asset_list_container.add_child(list_item)
+    
+    
+    # --- UI State Functions ---
+    
+    func select_asset_type(type_key: String):
+    	current_asset_type = type_key
+    	current_item = null
+    	hide_detail_view()
+    	_update_asset_list()
+    
+    func show_detail_view(item_data):
+    	current_item = item_data
+    	var type_data = asset_types[current_asset_type]
+    	
+    	if item_data:
+    		card_title.text = item_data.name
+    	else:
+    		card_title.text = "New %s" % type_data.label.trim_suffix("s")
+    	
+    	# Clear and populate tabs (simplified)
+    	form_tabs.clear_tabs()
+    	for tab_name in type_data.tabs:
+    		form_tabs.add_tab(tab_name)
+    		
+    	detail_placeholder.hide()
+    	form_view.show()
+    
+    func hide_detail_view():
+    	form_view.hide()
+    	detail_placeholder.show()
+    
+    
+    # --- Signal Handlers ---
+    
+    func _on_cancel_pressed():
+    	hide_detail_view()
+    
+    
+
+**Note:** This script requires two simple reusable scenes: `AssetNavButton.tscn` and `AssetListItem.tscn`. You will need to create these small scenes for the code to work. For example, `AssetNavButton.tscn` would be a `Button` node with a `Label` child, and a simple function like `func set_label(text): $Label.text = text`.
+
+You now have a complete, visually accurate, and interactive prototype of your World Builder, built entirely within the Godot editor. The next step would be to replace the placeholder `asset_types` dictionary with actual `Resource` loading and saving.
 
 
 

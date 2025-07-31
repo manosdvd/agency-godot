@@ -25,9 +25,8 @@ func _ready() -> void:
 	# --- Initial Setup ---
 	_populate_resource_tree()
 	_clear_editor_panel()
-	# Disable the editor until a resource is selected or created
-	$HSplitContainer/ScrollContainer.visible = false
-
+	# The line below is now commented out to keep the panel visible
+	# $HSplitContainer/ScrollContainer.visible = false
 
 # --- Signal Handlers ---
 
@@ -122,5 +121,6 @@ func _populate_editor_panel(resource: Resource) -> void:
 func _clear_editor_panel() -> void:
 	name_edit.clear()
 	description_edit.clear()
-	$HSplitContainer/ScrollContainer.visible = false
+	# The line below is now commented out to keep the panel visible
+	# $HSplitContainer/ScrollContainer.visible = false
 	current_resource = null
