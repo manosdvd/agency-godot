@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://2f2fdntra2fv"]
 
-[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="1_bwglb"]
 [ext_resource type="Script" uid="uid://bk8divobmdqy" path="res://scenes/world_builder/world_builder.gd" id="1_n2mmm"]
 [ext_resource type="Theme" uid="uid://dk4tb4ik5futb" path="res://themes/main_theme.tres" id="2_v2jxt"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="3_6j4u0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j7v7j"]
 
@@ -15,6 +15,14 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_v2jxt")
 script = ExtResource("1_n2mmm")
+
+[node name="ImageFileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.png, *.jpg, *.jpeg, *.webp ; Image Files")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -36,7 +44,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/NavPane/NavLayout"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_bwglb")
+theme_override_fonts/font = ExtResource("3_6j4u0")
 theme_override_font_sizes/font_size = 10
 text = "A"
 horizontal_alignment = 1
@@ -48,11 +56,11 @@ size_flags_vertical = 3
 [node name="ContentSplitter" type="HSplitContainer" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+split_offset = 300
 
 [node name="AssetListPane" type="PanelContainer" parent="HSplitContainer/ContentSplitter"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="ListLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/AssetListPane"]
 layout_mode = 2
@@ -80,59 +88,38 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder"]
 layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
-layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
 layout_mode = 2
-text = "asset 1"
-
-[node name="Label2" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
-layout_mode = 2
-text = "asset 2"
+text = "Select an asset to view or edit details."
+horizontal_alignment = 1
 
 [node name="FormView" type="PanelContainer" parent="HSplitContainer/ContentSplitter/DetailPane"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView"]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.33
-
-[node name="ImageSectionLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout"]
-layout_mode = 2
-
-[node name="CardTitle" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout"]
-layout_mode = 2
-
-[node name="FormSectionLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 0.67
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout"]
+[node name="FormSectionLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TabContainer" type="TabContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/ScrollContainer"]
+[node name="FormTabContainer" type="TabContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/VBoxContainer/FormSectionLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FooterButtons" type="HBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout"]
+[node name="FooterButtons" type="HBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/VBoxContainer"]
 layout_mode = 2
+alignment = 2
 
-[node name="CancelButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons"]
+[node name="CancelButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/VBoxContainer/FooterButtons"]
 layout_mode = 2
 text = "Cancel"
 
-[node name="SaveButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons"]
+[node name="SaveButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/VBoxContainer/FooterButtons"]
 layout_mode = 2
+theme_type_variation = &"SaveButton"
 text = "Save"
