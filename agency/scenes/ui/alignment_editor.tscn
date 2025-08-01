@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdiqjweq8ax8k"]
+
+[ext_resource type="Script" path="res://scenes/ui/alignment_editor.gd" id="1_abcde"]
+
+[node name="AlignmentEditor" type="GridContainer"]
+columns = 3
+script = ExtResource("1_abcde")

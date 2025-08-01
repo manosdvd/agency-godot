@@ -24,8 +24,8 @@ func _get_resource_name(resource: Resource) -> String:
 func _get_resource_description(resource: Resource) -> String:
 	if not is_instance_valid(resource):
 		return ""
-	if resource.has("description"):
-		var value = resource.get("description")
+	if resource.has("biography"):
+		var value = resource.get("biography")
 		if value is String:
 			return value
 	return ""

@@ -8,17 +8,17 @@ extends Control
 @onready var detail_placeholder = $HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder
 @onready var form_view = $HSplitContainer/ContentSplitter/DetailPane/FormView
 @onready var card_title = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout/CardTitle
-@onready var form_tabs = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/TabContainer
+@onready var form_tabs = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/ScrollContainer/TabContainer
 @onready var cancel_button = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons/CancelButton
 @onready var save_button = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons/SaveButton
 
 # --- Data ---
 const RESOURCE_PATHS = {
-	"Characters": "res://scripts/resources/character_resource.gd",
-	"Locations": "res://scripts/resources/location_resource.gd",
-	"Items": "res://scripts/resources/item_resource.gd",
-	"Factions": "res://scripts/resources/faction_resource.gd",
-	"Districts": "res://scripts/resources/district_resource.gd",
+	"Characters": "res://data/resources/character_resource.gd",
+	"Locations": "res://data/resources/location_resource.gd",
+	"Items": "res://data/resources/item_resource.gd",
+	"Factions": "res://data/resources/faction_resource.gd",
+	"Districts": "res://data/resources/district_resource.gd",
 }
 
 const ICON_PATHS = {
@@ -34,7 +34,10 @@ var current_asset_type: String = ""
 var current_resource: Resource = null
 
 const AssetNavButton = preload("res://scenes/ui/asset_nav_button.tscn")
-const AssetListItem = preload("res://scenes/ui/asset_list_item.tscn")
+const AssetCard = preload("res://scenes/ui/asset_card.tscn")
+const AlignmentEditor = preload("res://scenes/ui/alignment_editor.tscn")
+
+var main_menu_scene = preload("res://scenes/main_ui/main.tscn")
 
 # --- Godot Functions ---
 
@@ -90,6 +93,12 @@ func _setup_navigation():
 	for child in nav_buttons_container.get_children():
 		child.queue_free()
 	
+	# Add a back button at the top
+	var back_button = Button.new()
+	back_button.text = "Back to Main Menu"
+	back_button.pressed.connect(_on_back_button_pressed)
+	nav_buttons_container.add_child(back_button)
+
 	# Add a spacer at the top
 	var top_spacer = Control.new()
 	top_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -129,7 +138,7 @@ func _update_asset_list():
 	asset_list_container.add_child(new_button)
 	
 	for resource in type_data.items:
-		var list_item = AssetListItem.instantiate()
+		var list_item = AssetCard.instantiate()
 		asset_list_container.add_child(list_item)
 		list_item.set_data(resource)
 		list_item.custom_signal.connect(show_detail_view)
@@ -137,7 +146,6 @@ func _update_asset_list():
 func _generate_form_for_resource(resource: Resource):
 	for child in form_tabs.get_children():
 		child.queue_free()
-	form_tabs.clear_tabs()
 
 	if not is_instance_valid(resource):
 		return
@@ -157,9 +165,11 @@ func _generate_form_for_resource(resource: Resource):
 			label.text = p.name.capitalize().replace("_", " ")
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			label.size_flags_stretch_ratio = 0.4
 
 			var editor = _get_editor_for_property(p, resource)
 			editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			editor.size_flags_stretch_ratio = 0.6
 
 			field_container.add_child(label)
 			field_container.add_child(editor)
@@ -169,30 +179,70 @@ func _get_editor_for_property(p: Dictionary, resource: Resource) -> Node:
 	var editor
 	var current_value = resource.get(p.name)
 
-	match p.type:
-		TYPE_STRING:
-			if p.hint == PROPERTY_HINT_MULTILINE_TEXT:
+	# Check for resource links
+	var linked_asset_type = ""
+	for type_key in asset_types:
+		if type_key.to_lower().trim_suffix("s") == p.name.to_lower().replace("_", " "):
+			linked_asset_type = type_key
+			break
+
+	if not linked_asset_type.is_empty():
+		var option_button = OptionButton.new()
+		option_button.add_item("[None]", -1)
+		
+		var items = asset_types[linked_asset_type].items
+		for i in range(items.size()):
+			var item_resource = items[i]
+			option_button.add_item(_get_resource_name(item_resource), i)
+			if item_resource.id == current_value:
+				option_button.select(i + 1) # +1 because of [None]
+				
+		editor = option_button
+	else:
+		match p.type:
+			TYPE_STRING:
+				if p.hint == PROPERTY_HINT_MULTILINE_TEXT:
+					editor = TextEdit.new()
+					editor.custom_minimum_size.y = 100
+				else:
+					editor = LineEdit.new()
+				editor.text = str(current_value) if current_value != null else ""
+			TYPE_INT, TYPE_FLOAT:
+				if p.hint == PROPERTY_HINT_RANGE:
+					var slider = HSlider.new()
+					var hint_values = p.hint_string.split(",")
+					if hint_values.size() >= 2:
+						slider.min_value = float(hint_values[0])
+						slider.max_value = float(hint_values[1])
+					if hint_values.size() >= 3:
+						slider.step = float(hint_values[2])
+					slider.value = current_value or 0
+					editor = slider
+				else:
+					var spinbox = SpinBox.new()
+					spinbox.allow_lesser = true
+					spinbox.allow_greater = true
+					spinbox.value = current_value or 0
+					editor = spinbox
+			TYPE_BOOL:
+				editor = CheckBox.new()
+				editor.button_pressed = current_value or false
+			TYPE_ARRAY, TYPE_DICTIONARY:
 				editor = TextEdit.new()
 				editor.custom_minimum_size.y = 100
-			else:
+				editor.text = JSON.stringify(current_value)
+			TYPE_VECTOR2I:
+				if p.name == "alignment":
+					editor = AlignmentEditor.instantiate()
+					editor.set_alignment(current_value)
+				else:
+					editor = LineEdit.new()
+					editor.text = str(current_value)
+					editor.editable = false
+			_:
 				editor = LineEdit.new()
-			editor.text = current_value or ""
-		TYPE_INT, TYPE_FLOAT:
-			editor = SpinBox.new()
-			editor.allow_lesser = true
-			editor.allow_greater = true
-			editor.value = current_value or 0
-		TYPE_BOOL:
-			editor = CheckBox.new()
-			editor.button_pressed = current_value or false
-		TYPE_ARRAY, TYPE_DICTIONARY:
-			editor = TextEdit.new()
-			editor.custom_minimum_size.y = 100
-			editor.text = JSON.stringify(current_value)
-		_:
-			editor = LineEdit.new()
-			editor.text = str(current_value)
-			editor.editable = false
+				editor.text = str(current_value)
+				editor.editable = false
 	
 	editor.name = p.name
 	return editor
@@ -220,6 +270,7 @@ func show_detail_view(resource):
 		
 	detail_placeholder.hide()
 	form_view.show()
+	form_view.move_to_front()
 
 func hide_detail_view():
 	form_view.hide()
@@ -244,19 +295,38 @@ func _on_save_pressed():
 				var editor = field_container.get_node_or_null(p.name)
 				if is_instance_valid(editor):
 					var value
-					match p.type:
-						TYPE_STRING:
-							value = editor.text
-						TYPE_INT, TYPE_FLOAT:
-							value = editor.value
-						TYPE_BOOL:
-							value = editor.button_pressed
-						TYPE_ARRAY, TYPE_DICTIONARY:
-							var parse_result = JSON.parse_string(editor.text)
-							if parse_result:
-								value = parse_result
-							else:
-								push_error("Invalid JSON in form for property: " + p.name)
+					if editor is OptionButton:
+						var selected_index = editor.get_selected_id()
+						if selected_index > -1:
+							var linked_asset_type = ""
+							for type_key in asset_types:
+								if type_key.to_lower().trim_suffix("s") == p.name.to_lower().replace("_", " "):
+									linked_asset_type = type_key
+									break
+							if not linked_asset_type.is_empty():
+								var items = asset_types[linked_asset_type].items
+								value = items[selected_index].id
+						else:
+							value = ""
+					elif editor is GridContainer and p.name == "alignment":
+						value = editor.get_alignment()
+					else:
+						match p.type:
+							TYPE_STRING:
+								value = editor.text
+							TYPE_INT, TYPE_FLOAT:
+								if editor is HSlider:
+									value = editor.value
+								else: # SpinBox
+									value = editor.value
+							TYPE_BOOL:
+								value = editor.button_pressed
+							TYPE_ARRAY, TYPE_DICTIONARY:
+								var parse_result = JSON.parse_string(editor.text)
+								if parse_result:
+									value = parse_result
+								else:
+									push_error("Invalid JSON in form for property: " + p.name)
 					
 					if value != null:
 						current_resource.set(p.name, value)
@@ -278,3 +348,6 @@ func _on_save_pressed():
 	_scan_for_resources()
 	_update_asset_list()
 	hide_detail_view()
+
+func _on_back_button_pressed():
+	get_tree().change_scene_to_packed(main_menu_scene)
