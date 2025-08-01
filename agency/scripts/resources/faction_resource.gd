@@ -1,4 +1,4 @@
-@tool
+# faction_resource.gd
 extends Resource
 class_name FactionResource
 

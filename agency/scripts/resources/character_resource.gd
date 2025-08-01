@@ -1,4 +1,4 @@
-@tool
+# character_resource.gd
 extends Resource
 class_name CharacterResource
 
@@ -33,8 +33,6 @@ class_name CharacterResource
 @export_range(0, 100, 1) var victim_likelihood: int = 50
 @export_range(0, 100, 1) var killer_likelihood: int = 50
 @export_multiline var portrayal_notes: String = ""
-
-# Sleuth-specific fields
 @export var is_sleuth: bool = false
 @export var city: String = ""
 @export_multiline var primary_arc: String = ""

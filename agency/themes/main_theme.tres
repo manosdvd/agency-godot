@@ -1,21 +1,162 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cbhknop1vdjdr"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://dk4tb4ik5futb"]
 
-[ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="1_vu6l5"]
-[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_ydht1"]
+# --- FONT DEFINITIONS ---
+[ext_resource type="FontFile" path="res://assets/PoiretOne-Regular.ttf" id="1_font_display"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gw6x"]
-bg_color = Color(0.0627451, 0.0784314, 0.101961, 1)
+# --- STYLEBOX DEFINITIONS ---
 
+# Base Panel Style (Dark Gray)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.121569, 0.160784, 0.215686, 0.7) # gray-800
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.215686, 0.254902, 0.317647, 1) # gray-700
+
+# Cyan Button Style (Save)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_cyan"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.023529, 0.713726, 0.831373, 1) # cyan-500
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_cyan_hover"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0313725, 0.568627, 0.698039, 1) # cyan-600
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+# Gray Button Style (Cancel)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_gray"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.298039, 0.333333, 0.396078, 1) # gray-600
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_gray_hover"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.215686, 0.254902, 0.317647, 1) # gray-700
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+# Input Field Style (LineEdit, TextEdit)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.215686, 0.254902, 0.317647, 1) # gray-700
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+border_width_bottom = 2
+border_color = Color(0.298039, 0.333333, 0.396078, 1) # gray-600
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.215686, 0.254902, 0.317647, 1) # gray-700
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+border_width_bottom = 2
+border_color = Color(0.023529, 0.713726, 0.831373, 1) # cyan-500
+
+# Tab Styles
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.023529, 0.713726, 0.831373, 1) # cyan-500
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_unselected"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.215686, 0.254902, 0.317647, 0) # transparent
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+
+# --- MAIN THEME RESOURCE ---
 [resource]
-Control/colors/FontColor = Color(0.878431, 0.878431, 0.878431, 1)
-Control/font_sizes/fontsize = 16
-Control/fonts/Font = ExtResource("1_vu6l5")
-HeaderLabels/colors/fontcolor = Color(0.831373, 0.686275, 0.215686, 1)
-HeaderLabels/font_sizes/fontSize = 36
-HeaderLabels/fonts/font = ExtResource("2_ydht1")
-PanelContainer/styles/styles = SubResource("StyleBoxFlat_8gw6x")
-TabContainer/colors/font_hovered_color = Color(0.729412, 0.898039, 1, 1)
-TabContainer/colors/font_selected_color = Color(0, 0.898039, 1, 1)
-TabContainer/colors/font_unselected_color = Color(0.831373, 0.686275, 0.215686, 1)
-TabContainer/font_sizes/font_size = 36
-TabContainer/fonts/font = ExtResource("2_ydht1")
+default_font_size = 16
+default_font = ExtResource("1_font_display")
+
+# --- COLOR & FONT DEFINITIONS ---
+font_color = Color(0.819608, 0.835294, 0.854902, 1) # gray-300
+font_hover_color = Color(1, 1, 1, 1)
+font_focus_color = Color(1, 1, 1, 1)
+font_placeholder_color = Color(0.607843, 0.639216, 0.682353, 1) # gray-400
+
+# --- CONTROL TYPE STYLING ---
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/styles/normal = SubResource("StyleBoxFlat_button_gray")
+Button/styles/hover = SubResource("StyleBoxFlat_button_gray_hover")
+Button/styles/pressed = SubResource("StyleBoxFlat_button_gray_hover")
+
+LineEdit/styles/normal = SubResource("StyleBoxFlat_input")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_input_focus")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_input")
+
+TextEdit/styles/normal = SubResource("StyleBoxFlat_input")
+TextEdit/styles/focus = SubResource("StyleBoxFlat_input_focus")
+
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_tab_unselected")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+TabContainer/constants/side_margin = 10
+
+HSplitContainer/constants/separation = 8
+HSplitContainer/icons/grabber = preload("res://assets/icon_splitter.svg")
+
+VSplitContainer/constants/separation = 8
+VSplitContainer/icons/grabber = preload("res://assets/icon_splitter.svg")
+
+# Named Styles for specific buttons
+Button.Save/base_type = "Button"
+Button.Save/styles/normal = SubResource("StyleBoxFlat_button_cyan")
+Button.Save/styles/hover = SubResource("StyleBoxFlat_button_cyan_hover")
+Button.Save/styles/pressed = SubResource("StyleBoxFlat_button_cyan_hover")
+
+Label.Title/base_type = "Label"
+Label.Title/fonts/font = ExtResource("1_font_display")
+Label.Title/font_sizes/font_size = 28

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bb4qyrq3v8p55"]
 
-[ext_resource type="Theme" uid="uid://cbhknop1vdjdr" path="res://themes/main_theme.tres" id="1_k62ti"]
+[ext_resource type="Theme" uid="uid://dk4tb4ik5futb" path="res://themes/main_theme.tres" id="1_k62ti"]
 [ext_resource type="Script" uid="uid://cp0or0kxcub5x" path="res://scripts/main_ui/main.gd" id="2_87l0o"]
 [ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="2_swjf8"]
 [ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="3_87l0o"]

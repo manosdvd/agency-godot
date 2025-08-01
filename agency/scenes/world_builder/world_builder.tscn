@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://2f2fdntra2fv"]
+[gd_scene load_steps=5 format=3 uid="uid://2f2fdntra2fv"]
 
-[ext_resource type="Script" uid="uid://3cvslrw38kw0" path="res://scripts/world_builder/world_builder.gd" id="1_bwglb"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="1_bwglb"]
+[ext_resource type="Script" uid="uid://bk8divobmdqy" path="res://scenes/world_builder/world_builder.gd" id="1_n2mmm"]
+[ext_resource type="Theme" uid="uid://dk4tb4ik5futb" path="res://themes/main_theme.tres" id="2_v2jxt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j7v7j"]
 
 [node name="WorldBuilder" type="Control"]
 layout_mode = 3
@@ -9,7 +13,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bwglb")
+theme = ExtResource("2_v2jxt")
+script = ExtResource("1_n2mmm")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -18,68 +23,112 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
+[node name="NavPane" type="PanelContainer" parent="HSplitContainer"]
+custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_j7v7j")
 
-[node name="Label" type="Label" parent="HSplitContainer/VBoxContainer"]
+[node name="NavLayout" type="VBoxContainer" parent="HSplitContainer/NavPane"]
 layout_mode = 2
-text = "World Resources"
+
+[node name="Label" type="Label" parent="HSplitContainer/NavPane/NavLayout"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_bwglb")
+theme_override_font_sizes/font_size = 10
+text = "A"
 horizontal_alignment = 1
 
-[node name="ResourceTree" type="Tree" parent="HSplitContainer/VBoxContainer"]
+[node name="NavButtonsContainer" type="VBoxContainer" parent="HSplitContainer/NavPane/NavLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 2
-follow_focus = true
-
-[node name="EditorPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer"]
+[node name="ContentSplitter" type="HSplitContainer" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+[node name="AssetListPane" type="PanelContainer" parent="HSplitContainer/ContentSplitter"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ListLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/AssetListPane"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer"]
-layout_mode = 2
-text = "Name"
-
-[node name="NameEdit" type="LineEdit" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/ContentSplitter/AssetListPane/ListLayout"]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+[node name="ListTitle" type="Label" parent="HSplitContainer/ContentSplitter/AssetListPane/ListLayout/PanelContainer"]
+layout_mode = 2
+text = "World Builder"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/ContentSplitter/AssetListPane/ListLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AssetListContainer" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/AssetListPane/ListLayout/ScrollContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer2"]
+[node name="DetailPane" type="PanelContainer" parent="HSplitContainer/ContentSplitter"]
 layout_mode = 2
-text = "Description"
+size_flags_horizontal = 3
 
-[node name="DescriptionEdit" type="TextEdit" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer2"]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="HSplitContainer/ScrollContainer/EditorPanel"]
+[node name="DetailPlaceholder" type="PanelContainer" parent="HSplitContainer/ContentSplitter/DetailPane"]
 layout_mode = 2
 
-[node name="SaveButton" type="Button" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder"]
 layout_mode = 2
-text = "Save Resource"
 
-[node name="NewButton" type="Button" parent="HSplitContainer/ScrollContainer/EditorPanel/HBoxContainer3"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
 layout_mode = 2
-text = "New District
-"
 
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 1
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 170.0
-offset_bottom = 41.0
-text = "Back To Main Menu
-"
+[node name="Label" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
+layout_mode = 2
+text = "asset 1"
+
+[node name="Label2" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder/VBoxContainer"]
+layout_mode = 2
+text = "asset 2"
+
+[node name="FormView" type="PanelContainer" parent="HSplitContainer/ContentSplitter/DetailPane"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.33
+
+[node name="ImageSectionLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout"]
+layout_mode = 2
+
+[node name="CardTitle" type="Label" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout"]
+layout_mode = 2
+
+[node name="FormSectionLayout" type="VBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.67
+
+[node name="TabContainer" type="TabContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FooterButtons" type="HBoxContainer" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SaveButton" type="Button" parent="HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons"]
+layout_mode = 2
+text = "Save"

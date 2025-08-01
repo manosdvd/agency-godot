@@ -136,13 +136,13 @@ Now your scene tree is structured for the three-pane layout:
 
 ## Phase 3: Populating the Panes
 
-Now we fill each of the three `PanelContainer`s with the UI elements.
+Now we fill each of the three `PanelContainer`s with the UI elements. **Pay close attention to the new, explicit node names.**
 
 ### 3.1. NavPane (Left Sidebar)
 
-1.  Add a `VBoxContainer` as a child of `NavPane`.
+1.  Add a `VBoxContainer` as a child of `NavPane`. **Rename it `NavLayout`**.
     
-2.  Add a `Label` as a child of the `VBoxContainer`.
+2.  Add a `Label` as a child of `NavLayout`.
     
     -   Set its **Text** to `A`.
         
@@ -150,22 +150,22 @@ Now we fill each of the three `PanelContainer`s with the UI elements.
         
     -   Set **Horizontal Alignment** to **Center**.
         
-3.  Add another `VBoxContainer` to `NavPane`'s `VBoxContainer`. This will hold the buttons. Name it `NavButtonsContainer`.
+3.  Add another `VBoxContainer` to `NavLayout`. **Rename it `NavButtonsContainer`**. This will hold the buttons.
     
 
 ### 3.2. AssetListPane (Middle Column)
 
-1.  Add a `VBoxContainer` to `AssetListPane`.
+1.  Add a `VBoxContainer` to `AssetListPane`. **Rename it `ListLayout`**.
     
-2.  Add a `PanelContainer` to this `VBoxContainer` for the header.
+2.  Add a `PanelContainer` to `ListLayout` for the header.
     
-    -   Inside this header panel, add a `Label`. Rename it `ListTitle`. Set its **Text** to `World Builder`.
+    -   Inside this header panel, add a `Label`. **Rename** it `ListTitle`. Set its **Text** to `World Builder`.
         
-3.  Add a `ScrollContainer` to the `VBoxContainer`.
+3.  Add a `ScrollContainer` to `ListLayout`.
     
     -   Set its **Size Flags -> Vertical** to **Expand, Fill**.
         
-4.  Add a `VBoxContainer` to the `ScrollContainer`. Rename it `AssetListContainer`. This is where the actual asset items will be added by our script.
+4.  Add a `VBoxContainer` to the `ScrollContainer`. **Rename** it `AssetListContainer`. This is where the actual asset items will be added by our script.
     
 
 ### 3.3. DetailPane (Right Column)
@@ -174,7 +174,7 @@ This pane will contain two main states: the placeholder and the form.
 
 1.  **Placeholder View:**
     
-    -   Add a `CenterContainer` to `DetailPane`. Rename it `DetailPlaceholder`.
+    -   Add a `CenterContainer` to `DetailPane`. **Rename** it `DetailPlaceholder`.
         
     -   Add a `VBoxContainer` to the `CenterContainer`.
         
@@ -182,7 +182,7 @@ This pane will contain two main states: the placeholder and the form.
         
 2.  **Form View:**
     
-    -   Add a `PanelContainer` to `DetailPane`. Rename it `FormView`. Set its **Anchors Preset** to **Full Rect**. By default, set its **Visible** property (in the Inspector) to `false`.
+    -   Add a `PanelContainer` to `DetailPane`. **Rename** it `FormView`. Set its **Anchors Preset** to **Full Rect**. By default, set its **Visible** property (in the Inspector) to `false`.
         
     -   Add an `HBoxContainer` to `FormView`.
         
@@ -190,17 +190,17 @@ This pane will contain two main states: the placeholder and the form.
         
         -   Add a `PanelContainer` to the `HBoxContainer`. Set its **Size Flags -> Horizontal** to **Expand, Fill** and its **Stretch Ratio** to `0.33`.
             
-        -   Inside, add a `VBoxContainer` and then a `TextureRect` for the image and a `Label` for the card's title.
+        -   Inside, add a `VBoxContainer`. **Rename it `ImageSectionLayout`**. Then add a `TextureRect` for the image and a `Label`. **Rename the Label `CardTitle`**.
             
     -   **Form Section (Right):**
         
-        -   Add a `VBoxContainer` to the `HBoxContainer`. Set its **Stretch Ratio** to `0.67`.
+        -   Add a `VBoxContainer` to the `HBoxContainer`. **Rename it `FormSectionLayout`**. Set its **Stretch Ratio** to `0.67`.
             
-        -   Inside this `VBoxContainer`, add a `TabContainer`.
+        -   Inside `FormSectionLayout`, add a `TabContainer`.
             
         -   Set the `TabContainer`'s **Size Flags -> Vertical** to **Expand, Fill**.
             
-        -   Add a final `HBoxContainer` at the bottom of the `VBoxContainer` for the **Cancel** and **Save** buttons. Add two `Button` nodes to it.
+        -   Add a final `HBoxContainer` at the bottom of `FormSectionLayout`. **Rename it `FooterButtons`**. Add two `Button` nodes to it. **Rename them `CancelButton` and `SaveButton`**.
             
 
 ## Phase 4: The Controller Script (`world_builder.gd`)
@@ -214,21 +214,39 @@ With the visual layout complete, we add a script to make it interactive.
 3.  Save it as `world_builder.gd`.
     
 
-Here is the initial code structure. Copy and paste this into your new script.
+Here is the **corrected** code structure. The node paths now match the explicit names from Phase 3.
 
     # world_builder.gd
     extends Control
     
     # --- UI Node References ---
-    # We get references to the nodes we need to manipulate.
-    @onready var nav_buttons_container = $HSplitContainer/NavPane/VBoxContainer/NavButtonsContainer
-    @onready var list_title = $HSplitContainer/ContentSplitter/AssetListPane/VBoxContainer/PanelContainer/ListTitle
-    @onready var asset_list_container = $HSplitContainer/ContentSplitter/AssetListPane/VBoxContainer/ScrollContainer/AssetListContainer
+    # These paths MUST EXACTLY match the names in your scene tree from Phase 3.
+    # Double-check them if you get "Node not found" errors.
     
+    # Path: HSplitContainer -> NavPane -> NavLayout -> NavButtonsContainer
+    @onready var nav_buttons_container = $HSplitContainer/NavPane/NavLayout/NavButtonsContainer
+    
+    # Path: HSplitContainer -> ContentSplitter -> AssetListPane -> ListLayout -> PanelContainer -> ListTitle
+    @onready var list_title = $HSplitContainer/ContentSplitter/AssetListPane/ListLayout/PanelContainer/ListTitle
+    
+    # Path: HSplitContainer -> ContentSplitter -> AssetListPane -> ListLayout -> ScrollContainer -> AssetListContainer
+    @onready var asset_list_container = $HSplitContainer/ContentSplitter/AssetListPane/ListLayout/ScrollContainer/AssetListContainer
+    
+    # Path: HSplitContainer -> ContentSplitter -> DetailPane -> DetailPlaceholder
     @onready var detail_placeholder = $HSplitContainer/ContentSplitter/DetailPane/DetailPlaceholder
+    
+    # Path: HSplitContainer -> ContentSplitter -> DetailPane -> FormView
     @onready var form_view = $HSplitContainer/ContentSplitter/DetailPane/FormView
-    @onready var card_title = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/VBoxContainer/CardTitle
-    @onready var form_tabs = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/VBoxContainer2/TabContainer
+    
+    # Path: HSplitContainer -> ContentSplitter -> DetailPane -> FormView -> HBoxContainer -> PanelContainer -> ImageSectionLayout -> CardTitle
+    @onready var card_title = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/PanelContainer/ImageSectionLayout/CardTitle
+    
+    # Path: HSplitContainer -> ContentSplitter -> DetailPane -> FormView -> HBoxContainer -> FormSectionLayout -> TabContainer
+    @onready var form_tabs = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/TabContainer
+    
+    # Path: HSplitContainer -> ContentSplitter -> DetailPane -> FormView -> HBoxContainer -> FormSectionLayout -> FooterButtons -> CancelButton
+    @onready var cancel_button = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/FormSectionLayout/FooterButtons/CancelButton
+    
     
     # --- Data ---
     # This dictionary mimics our asset data from the mockup.
@@ -259,6 +277,7 @@ Here is the initial code structure. Copy and paste this into your new script.
     var current_item = null
     
     # Preload the scenes for our reusable UI components
+    # NOTE: You must create these two simple scenes for the code to run.
     const AssetNavButton = preload("res://scenes/ui/asset_nav_button.tscn")
     const AssetListItem = preload("res://scenes/ui/asset_list_item.tscn")
     
@@ -267,13 +286,13 @@ Here is the initial code structure. Copy and paste this into your new script.
     func _ready():
     	# This function is called when the scene starts.
     	_setup_navigation()
+    	
     	# Select the first asset type by default
     	if not asset_types.is_empty():
     		select_asset_type(asset_types.keys()[0])
     	
     	# Connect signals from the Cancel button
-    	var cancel_btn = $HSplitContainer/ContentSplitter/DetailPane/FormView/HBoxContainer/VBoxContainer2/HBoxContainer/CancelButton
-    	cancel_btn.pressed.connect(_on_cancel_pressed)
+    	cancel_button.pressed.connect(_on_cancel_pressed)
     
     
     # --- UI Setup Functions ---
@@ -338,7 +357,10 @@ Here is the initial code structure. Copy and paste this into your new script.
     	# Clear and populate tabs (simplified)
     	form_tabs.clear_tabs()
     	for tab_name in type_data.tabs:
-    		form_tabs.add_tab(tab_name)
+    		var label = Label.new()
+    		label.text = "Content for %s" % tab_name
+    		form_tabs.add_child(label)
+    		form_tabs.set_tab_title(form_tabs.get_tab_count() - 1, tab_name)
     		
     	detail_placeholder.hide()
     	form_view.show()
@@ -355,9 +377,20 @@ Here is the initial code structure. Copy and paste this into your new script.
     
     
 
-**Note:** This script requires two simple reusable scenes: `AssetNavButton.tscn` and `AssetListItem.tscn`. You will need to create these small scenes for the code to work. For example, `AssetNavButton.tscn` would be a `Button` node with a `Label` child, and a simple function like `func set_label(text): $Label.text = text`.
+## Phase 5: Troubleshooting
 
-You now have a complete, visually accurate, and interactive prototype of your World Builder, built entirely within the Godot editor. The next step would be to replace the placeholder `asset_types` dictionary with actual `Resource` loading and saving.
+### "I see a blank screen!" or "I get a 'Node not found' error."
+
+This is the most common issue and it's 99% certain to be a mismatch between the node paths in the script and the node names in your Scene Tree.
+
+1.  **Check Your Names:** Go through the Scene Tree and compare every single node name against the names specified in **Phase 3** of this guide. Pay special attention to the container nodes I asked you to rename, like `NavLayout`, `ListLayout`, `ImageSectionLayout`, and `FormSectionLayout`.
+    
+2.  **Check Your Paths:** Look at the `@onready var` lines at the top of the script. I have added comments above each one showing the exact path it expects. For example: `# Path: HSplitContainer -> NavPane -> NavLayout -> NavButtonsContainer` `@onready var nav_buttons_container = $HSplitContainer/NavPane/NavLayout/NavButtonsContainer` Trace this path in your Scene Tree. If your tree doesn't match this structure and naming exactly, the script will fail.
+    
+3.  **The Easiest Fix:** In the script, you can right-click a node path (the part in quotes after the `$`) and select "Copy Node Path". Then, go to your Scene Tree, right-click the correct node, and select "Paste Node Path". This ensures the path is 100% correct.
+    
+
+By ensuring your scene tree and script paths are perfectly aligned, the blank screen issue will be resolved.
 
 
 

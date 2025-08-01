@@ -1,4 +1,4 @@
-@tool
+# district_resource.gd
 extends Resource
 class_name DistrictResource
 
