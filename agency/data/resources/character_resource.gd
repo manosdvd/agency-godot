@@ -6,7 +6,7 @@ class_name CharacterResource
 @export var full_name: String = ""
 @export var alias: String = ""
 @export var age: int = 30
-@export var gender: String = ""
+@export_enum("Male", "Female", "Non-binary", "Other", "Undisclosed") var gender: String = ""
 @export var employment: String = ""
 @export_multiline var biography: String = ""
 @export var image_path: String = ""

@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bb4qyrq3v8p55"]
+[gd_scene load_steps=5 format=3 uid="uid://bb4qyrq3v8p55"]
 
 [ext_resource type="Theme" uid="uid://dk4tb4ik5futb" path="res://themes/main_theme.tres" id="1_k62ti"]
 [ext_resource type="Script" uid="uid://cp0or0kxcub5x" path="res://scripts/main_ui/main.gd" id="2_87l0o"]
+[ext_resource type="FontFile" uid="uid://cmyqcwlx6y8gd" path="res://assets/PoiretOne-Regular.ttf" id="3_87l0o"]
+[ext_resource type="FontFile" uid="uid://b5ha3lscdscnl" path="res://assets/Inter-VariableFont_opsz,wght.ttf" id="4_ihbyj"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -27,7 +29,9 @@ theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("1_k62ti")
 theme_type_variation = &"Title"
+theme_override_fonts/font = ExtResource("3_87l0o")
 theme_override_font_sizes/font_size = 96
 text = "AGENCY"
 horizontal_alignment = 1
@@ -35,17 +39,21 @@ horizontal_alignment = 1
 [node name="WorldBuilderButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"Primary"
+theme_override_fonts/font = ExtResource("4_ihbyj")
 text = "World Builder"
 
 [node name="CaseCreatorButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"Primary"
+theme_override_fonts/font = ExtResource("4_ihbyj")
 text = "Case Builder"
 
 [node name="ValidatorButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ihbyj")
 text = "Validator"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ihbyj")
 text = "Quit"
